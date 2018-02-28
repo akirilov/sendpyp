@@ -48,8 +48,9 @@ def sendipv4(eth_src, eth_dst, eth_type, ip_src, ip_dst, ip_type, payload, iface
   
     # Checksum
     checksum = 0
-    for i in range(0, len(frame), 2):
-        chunk = frame[i:i+2]
+    csframe = frame + ip_src + ip_dst
+    for i in range(0, len(csframe), 2):
+        chunk = csframe[i:i+2]
         chunk_val = struct.unpack('>H', chunk)[0]
         checksum += chunk_val
         checksum = (checksum & 0xffff) + (checksum >> 16)
